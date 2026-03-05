@@ -21,5 +21,9 @@ export const routes: Routes = [
     path: 'perfiladministrador',
     loadComponent: () => import('./perfiladministrador/perfiladministrador.page').then( m => m.PerfiladministradorPage)
   },
+  {
+    path: 'calificacionusuario',
+    loadComponent: () => import('./calificacionusuario/calificacionusuario.page').then( m => m.CalificacionusuarioPage)
+  },
 
 ];
