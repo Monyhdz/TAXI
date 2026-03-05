@@ -12,82 +12,147 @@
         <ion-icon name="car-sport-outline" class="taxi-icon"></ion-icon>
       </div>
       <h1 class="app-title">Taxi<span class="yellow-text">App</span></h1>
-      <p class="subtitle">Tu viaje comienza aquí</p>
+      <p class="subtitle">Selecciona cómo deseas ingresar</p>
     </div>
 
-    <!-- Tarjeta de login -->
-    <div class="login-card">
-      <!-- Pestañas de login/registro -->
-      <div class="tabs-container">
-        <div class="tab active">Iniciar Sesión</div>
-        <div class="tab">Registrarse</div>
-      </div>
-
-      <!-- Formulario de login -->
-      <form class="login-form">
-        <!-- Campo de email -->
-        <div class="input-group">
-          <ion-icon name="mail-outline" class="input-icon"></ion-icon>
-          <ion-input 
-            type="email" 
-            placeholder="Correo electrónico"
-            name="email">
-          </ion-input>
+    <!-- Selector de tipo de usuario (CLIENTE / CHOFER) -->
+    <div class="user-type-selector">
+      <div class="user-type-tabs">
+        <div 
+          class="user-type-tab" 
+          [class.active]="userType === 'cliente'"
+          (click)="setUserType('cliente')">
+          <ion-icon name="person-outline"></ion-icon>
+          <span>Cliente</span>
         </div>
-
-        <!-- Campo de contraseña -->
-        <div class="input-group">
-          <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
-          <ion-input 
-            type="password" 
-            placeholder="Contraseña"
-            name="password">
-          </ion-input>
-          <ion-icon name="eye-off-outline" class="password-toggle"></ion-icon>
-        </div>
-
-        <!-- Opciones adicionales -->
-        <div class="options-row">
-          <div class="remember-me">
-            <ion-checkbox></ion-checkbox>
-            <span>Recordarme</span>
-          </div>
-          <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
-        </div>
-
-        <!-- Botón de login -->
-        <ion-button expand="block" class="login-button">
-          Iniciar Sesión
-          <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
-        </ion-button>
-
-        <!-- Botones de redes sociales -->
-        <div class="social-section">
-          <p class="social-text">O continúa con</p>
-          <div class="social-buttons">
-            <ion-button fill="clear" class="social-btn google">
-              <ion-icon name="logo-google"></ion-icon>
-            </ion-button>
-            <ion-button fill="clear" class="social-btn facebook">
-              <ion-icon name="logo-facebook"></ion-icon>
-            </ion-button>
-            <ion-button fill="clear" class="social-btn apple">
-              <ion-icon name="logo-apple"></ion-icon>
-            </ion-button>
-          </div>
-        </div>
-
-        <!-- Link de registro -->
-        <div class="register-link">
-          <p>¿No tienes cuenta? <a href="#">Regístrate aquí</a></p>
-        </div>
-
-        <!-- Mensaje de chofer -->
-        <div class="driver-message">
+        <div 
+          class="user-type-tab" 
+          [class.active]="userType === 'chofer'"
+          (click)="setUserType('chofer')">
           <ion-icon name="car-outline"></ion-icon>
-          <span>¿Eres chofer? <a href="#">Accede como conductor</a></span>
+          <span>Chofer</span>
         </div>
-      </form>
+      </div>
     </div>
+
+    <!-- TARJETA PARA CLIENTE -->
+    @if (userType === 'cliente') {
+      <div class="login-card">
+        <form class="login-form">
+          <!-- Campo de email -->
+          <div class="input-group">
+            <ion-icon name="mail-outline" class="input-icon"></ion-icon>
+            <ion-input 
+              type="email" 
+              placeholder="Correo electrónico"
+              name="email"
+              [(ngModel)]="loginData.email">
+            </ion-input>
+          </div>
+
+          <!-- Campo de contraseña -->
+          <div class="input-group">
+            <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+            <ion-input 
+              type="password" 
+              placeholder="Contraseña"
+              name="password"
+              id="clientePassword"
+              [(ngModel)]="loginData.password">
+            </ion-input>
+            <ion-icon 
+              name="eye-off-outline" 
+              class="password-toggle"
+              (click)="togglePassword('clientePassword', 'clienteEyeIcon')"
+              id="clienteEyeIcon">
+            </ion-icon>
+          </div>
+
+          <!-- Opciones adicionales -->
+          <div class="options-row">
+            <div class="remember-me">
+              <ion-checkbox [(ngModel)]="loginData.rememberMe" name="rememberMe"></ion-checkbox>
+              <span>Recordarme</span>
+            </div>
+            <a href="#" class="forgot-link" (click)="olvidePassword($event)">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <!-- Botón de login para cliente -->
+          <ion-button expand="block" class="login-button" (click)="loginCliente()">
+            Iniciar Sesión como Cliente
+            <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+          </ion-button>
+
+          <!-- Link de registro para cliente -->
+          <div class="register-link">
+            <p>¿No tienes cuenta? 
+              <a href="#" (click)="irARegistroCliente($event)">
+                Regístrate aquí
+              </a>
+            </p>
+          </div>
+        </form>
+      </div>
+    }
+
+    <!-- TARJETA PARA CHOFER -->
+    @if (userType === 'chofer') {
+      <div class="login-card">
+        <form class="login-form">
+          <!-- Campo de email -->
+          <div class="input-group">
+            <ion-icon name="mail-outline" class="input-icon"></ion-icon>
+            <ion-input 
+              type="email" 
+              placeholder="Correo electrónico"
+              name="email"
+              [(ngModel)]="loginChoferData.email">
+            </ion-input>
+          </div>
+
+          <!-- Campo de contraseña -->
+          <div class="input-group">
+            <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+            <ion-input 
+              type="password" 
+              placeholder="Contraseña"
+              name="password"
+              id="choferPassword"
+              [(ngModel)]="loginChoferData.password">
+            </ion-input>
+            <ion-icon 
+              name="eye-off-outline" 
+              class="password-toggle"
+              (click)="togglePassword('choferPassword', 'choferEyeIcon')"
+              id="choferEyeIcon">
+            </ion-icon>
+          </div>
+
+          <!-- Opciones adicionales -->
+          <div class="options-row">
+            <div class="remember-me">
+              <ion-checkbox [(ngModel)]="loginChoferData.rememberMe" name="rememberMe"></ion-checkbox>
+              <span>Recordarme</span>
+            </div>
+            <a href="#" class="forgot-link" (click)="olvidePassword($event)">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <!-- Botón de login para chofer -->
+          <ion-button expand="block" class="login-button" (click)="loginChofer()">
+            Iniciar Sesión como Chofer
+            <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+          </ion-button>
+
+          <!-- Link de registro para chofer -->
+          <div class="register-link">
+            <p>¿No eres chofer? 
+              <a href="#" (click)="irARegistroChofer($event)">
+                Regístrate aquí
+              </a>
+            </p>
+          </div>
+        </form>
+      </div>
+    }
   </div>
 </ion-content>
