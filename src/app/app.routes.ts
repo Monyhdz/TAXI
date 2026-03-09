@@ -25,5 +25,13 @@ export const routes: Routes = [
     path: 'calificacionusuario',
     loadComponent: () => import('./calificacionusuario/calificacionusuario.page').then( m => m.CalificacionusuarioPage)
   },
+  {
+    path: 'perfilusuario',
+    loadComponent: () => import('./perfilusuario/perfilusuario.page').then( m => m.PerfilusuarioPage)
+  },
+  {
+    path: 'historialusuario',
+    loadComponent: () => import('./historialusuario/historialusuario.page').then( m => m.HistorialusuarioPage)
+  },
 
 ];
